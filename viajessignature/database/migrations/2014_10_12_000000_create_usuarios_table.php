@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('activo')->default(true);
+            $table->boolean('eliminado')->default(false);
             $table->dateTime('fecha_creado');
             $table->dateTime('fecha_editado');
             $table->dateTime('fecha_eliminado')->nullable();
@@ -41,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('usuarios');
     }
 };
