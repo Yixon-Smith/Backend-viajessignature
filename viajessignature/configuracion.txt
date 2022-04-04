@@ -1,0 +1,8 @@
+paso 1) Crea una base de datos en xampp 
+	nombre de base de datos: viajessignature
+
+paso 2) ejecuta en la consola
+	comando: php artisan migrate --seed
+
+paso 3) ejecuta en la consola
+	comando: php artisan passport:client --personal

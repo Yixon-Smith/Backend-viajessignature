@@ -13,6 +13,7 @@ class ApiAuthController extends Controller
 {
     public function login(Request $request)
     {
+     
         $validator = Validator::make($request->all(), [
             'email' => ['required'],
             'password' => ['required']
@@ -36,26 +37,17 @@ class ApiAuthController extends Controller
 
         $user = $request->user();
 
-       
-        /*$user_id = Auth::user()->usuario_id;
-        $usuario = User::find($user_id);
-        echo $usuario->getRoleNames()->first();*/
-     
-
-        //$user->getRoleNames()->first();
         $permissions = [];
 
         if( $request->user()->getAllPermissions() != null ){
            $userPermission = $request->user()->getAllPermissions();
-
             
             foreach ($userPermission as $permission) {
                 $result = explode('.',$permission->name);
-
                 if( count($permissions) != 0 && !in_array($result[0], $permissions) ){
-                    array_push($permissions, $result[0]);
+                    array_push($permissions, "/".$result[0]);
                 }else if( count($permissions) == 0 ){
-                    array_push($permissions, $result[0]);
+                    array_push($permissions, "/".$result[0]);
                 }
             }
 
@@ -77,32 +69,9 @@ class ApiAuthController extends Controller
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
             'expires_at'   => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
-            'routes' => ( count($permissions) != 0 ) ? $permissions : '*'
+            'routes' => ( count($permissions) != 0 ) ? $permissions : ['*']
         ], 200);
-        
-        
-        /*$user = User::where('email','=', $request->email)->first();
-        $permissions = [];
-
-        if( $user->getAllPermissions() != null ){
-            //$userPermission = $request->user()->getAllPermissions();
-            $userPermission = $user->getAllPermissions();
- 
-             
-             foreach ($userPermission as $permission) {
-                 $result = explode('.',$permission->name);
- 
-                 if( count($permissions) != 0 && !in_array($result[0], $permissions) ){
-                     array_push($permissions, $result[0]);
-                 }else if( count($permissions) == 0 ){
-                     array_push($permissions, $result[0]);
-                 }
-             }
- 
-         }*/
-
        
-
     }
 
     public function logout(Request $request)
